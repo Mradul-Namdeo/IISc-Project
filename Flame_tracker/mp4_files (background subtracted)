@@ -1,9 +1,0 @@
-File Details & Methodology:
-
-1) The source videos were converted from a high-speed .cine format to .mp4 for processing in Python.
-
-2) A static Region of Interest (ROI) mask was applied to each frame to focus only on the "pipe" area and eliminate all external background noise.
-
-3) OpenCV's MOG2 algorithm was used for background subtraction to separate the moving flame from the static elements inside the pipe.
-
-4) The resulting mask is applied to the original video frames to produce an output video that preserves the flame's natural shape, color, and saturation.
