@@ -3,7 +3,6 @@ import numpy as np
 import os
 
 # --- CONFIGURATION ---
-# IMPORTANT: Make sure this path is correct for your system.
 CSV_FILE_PATH = r'D:\Flame_tracking\Dataset\flame_analysis_data.csv'
 
 OUTPUT_FILENAME = 'flame_normalized_plot.png'
