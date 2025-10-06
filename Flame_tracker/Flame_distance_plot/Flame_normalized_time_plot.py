@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 # --- CONFIGURATION ---
 # IMPORTANT: Make sure this path is correct for your system.
 CSV_FILE_PATH = r'D:\Flame_tracking\Dataset\flame_analysis_data.csv'
+
+OUTPUT_FILENAME = 'flame_normalized_plot.png'
+
 
 def plot_normalized_trajectories(file_path):
     """
@@ -71,7 +75,18 @@ def plot_normalized_trajectories(file_path):
     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
     ax.legend(title='Flame ID')
     
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 0.9, 1])
+    
+    # --- Save the figure to a file before showing it ---
+    try:
+        # dpi=300 sets a high resolution for the image.
+        # bbox_inches='tight' ensures the saved image includes the legend.
+        plt.savefig(OUTPUT_FILENAME, dpi=300, bbox_inches='tight')
+        print(f"Plot successfully saved to: {os.path.abspath(OUTPUT_FILENAME)}")
+    except Exception as e:
+        print(f"[ERROR] Could not save the plot. Reason: {e}")
+
+    # Display the plot
     plt.show()
 
 if __name__ == "__main__":
