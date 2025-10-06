@@ -6,7 +6,7 @@ import sys
 # --- 1. CONFIGURATION ---
 # ===================================================================================
 
-# --- MODIFICATION: Create a list of video paths to process in order ---
+# --- Create a list of video paths to process in order ---
 video_paths = [
     r"D:\Flame_tracking\Flame_mp4_files\U_0p3_Phi_1p0_background_subtracted.mp4",
     r"D:\Flame_tracking\Flame_mp4_files\U_0p475_Phi_1p0_background_subtracted.mp4"
