@@ -10,13 +10,13 @@ import numpy as np
 # ===================================================================================
 
 # --- PRIMARY PARAMETER ---
-BRIGHTNESS_DETECTION_THRESHOLD = 2
+BRIGHTNESS_DETECTION_THRESHOLD = 1
 
 # --- SECONDARY PARAMETERS ---
 FRAMES_TO_SEARCH_FOR_BACKGROUND = 20
 
 STATIC_THRESHOLD = 2 
-STATIC_ERASER_THRESHOLD = 7
+STATIC_ERASER_THRESHOLD = 5
 # ===================================================================================
 
 
@@ -26,7 +26,7 @@ STATIC_ERASER_THRESHOLD = 7
 # --- File Paths ---
 IMAGE_FOLDER_PATH_INPUT = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Phi_1p2_u_0p4_C001H001S0001_frames"
 TEMPLATE_FOLDER_PATH = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Phi_1p0_u_0p3_C001H001S0001_similar_images"
-TRAJECTORY_OUTPUT_FILE = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Datasets_intensity_test\Phi_1p2_u_0p4_C001H001S0001.csv"
+TRAJECTORY_OUTPUT_FILE = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Datasets_intensity\Phi_1p2_u_0p4_C001H001S0001.csv"
 VIDEO_OUTPUT_FOLDER = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Recorded tracking videos"
 
 FPS_FOR_TIMESTAMPS = 30.0 
@@ -41,8 +41,8 @@ PIPE_ZONE = (0.0, 11.0, 210.0, 15.9)
 scale_y_position_mm = 22.0
 
 EXTINGUISH_THRESHOLD = -1.5 
-LOST_TIMEOUT_SECONDS = 0.15
-RECORDING_CUTOFF_S = 0.15 
+LOST_TIMEOUT_SECONDS = 0.13
+RECORDING_CUTOFF_S = 0.13
 DISPLAY_BOX_SIZE = (45, 30)
 
 SEARCH_AREA_SCALE = 2.0 
@@ -436,7 +436,7 @@ def main():
 
     os.makedirs(VIDEO_OUTPUT_FOLDER, exist_ok=True)
     video_basename = os.path.basename(os.path.normpath(IMAGE_FOLDER_PATH_INPUT))
-    VIDEO_OUTPUT_PATH = os.path.join(VIDEO_OUTPUT_FOLDER, f"{video_basename}_New_Newflame_tracked_intensity_test.mp4")
+    VIDEO_OUTPUT_PATH = os.path.join(VIDEO_OUTPUT_FOLDER, f"{video_basename}_flame_tracked_intensity.mp4")
     
     fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 
