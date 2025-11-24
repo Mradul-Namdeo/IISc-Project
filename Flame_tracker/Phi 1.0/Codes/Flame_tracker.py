@@ -10,7 +10,8 @@ import numpy as np
 # ===================================================================================
 
 # --- PRIMARY PARAMETER ---
-BRIGHTNESS_DETECTION_THRESHOLD = 1
+# If the brightest pixel in the search area is below this, we assume no flame.
+BRIGHTNESS_DETECTION_THRESHOLD = 1 
 
 # --- SECONDARY PARAMETERS ---
 FRAMES_TO_SEARCH_FOR_BACKGROUND = 20
@@ -25,7 +26,6 @@ STATIC_ERASER_THRESHOLD = 1
 # ===================================================================================
 # --- File Paths ---
 IMAGE_FOLDER_PATH_INPUT = r"D:\FREI_videos_Flame_tracking\Phi_1p0\Phi_1p0_u_0p3_C001H001S0001\Phi_1p0_u_0p3_C001H001S0001_frames"
-TEMPLATE_FOLDER_PATH = r"D:\FREI_videos_Flame_tracking\Phi_1p0\Phi_1p0_u_0p3_C001H001S0001\Phi_1p0_u_0p3_C001H001S0001_similar_images"
 TRAJECTORY_OUTPUT_FILE = r"D:\FREI_videos_Flame_tracking\Phi_1p0\Phi_1p0_u_0p3_C001H001S0001\Datasets_intensity\Phi_1p0_u_0p3_C001H001S0001.csv"
 VIDEO_OUTPUT_FOLDER = r"D:\FREI_videos_Flame_tracking\Phi_1p0\Phi_1p0_u_0p3_C001H001S0001\Recorded tracking videos"
 
@@ -40,7 +40,6 @@ PIPE_ZONE = (0.0, 11.0, 210.0, 15.9)
 
 scale_y_position_mm = 22.0
 
-EXTINGUISH_THRESHOLD = -1.5 
 LOST_TIMEOUT_SECONDS = 0.15
 RECORDING_CUTOFF_S = 0.15 
 DISPLAY_BOX_SIZE = (45, 30)
@@ -67,7 +66,7 @@ def get_centroid_x_in_mm(box, pixels_per_mm, direction='L', total_width_mm=0):
     else: # 'R'
         return (total_width_mm - original_mm)
 
-def initialize_system_from_images(image_folder_path, template_folder_path, fps_for_timestamps):
+def initialize_system_from_images(image_folder_path, fps_for_timestamps):
     image_extensions = ('*.png', '*.jpg', '*.jpeg', '*.bmp', '*.tif')
     image_paths = []
     for ext in image_extensions:
@@ -87,23 +86,10 @@ def initialize_system_from_images(image_folder_path, template_folder_path, fps_f
     
     frame_height, frame_width, _ = first_image.shape
     
-    template_extensions = ('*.png', '*.jpg', '*.jpeg')
-    template_paths = []
-    for ext in template_extensions:
-        template_paths.extend(glob.glob(os.path.join(template_folder_path, ext)))
-    
-    templates = [cv2.imread(path, cv2.IMREAD_GRAYSCALE) for path in template_paths]
-    templates = [t for t in templates if t is not None]
-    
-    if not templates:
-        print(f"[ERROR] No valid template images found in '{template_folder_path}'. Exiting.")
-        sys.exit()
-    
-    print(f"--- Flame Tracker: Loaded {len(templates)} templates for verification ---")
     print(f"--- Image Properties: {frame_width}x{frame_height} ---")
     print(f"--- Using DATA FPS for timestamps: {fps_for_timestamps:.2f} ---")
     
-    return image_paths, templates, frame_width, frame_height
+    return image_paths, frame_width, frame_height
 
 # --- UPDATED FUNCTION: DARKEST FRAME INSIDE PIPE ZONE ---
 def find_best_background_frame(image_paths, search_limit, f_dims, pipe_zone_coords):
@@ -153,13 +139,17 @@ def find_best_background_frame(image_paths, search_limit, f_dims, pipe_zone_coor
     print(f"--- Selected Frame {best_frame_index} (Darkest Pipe). Score: {min_total_intensity} ---")
     return best_frame_index
 
-def find_initial_flame(frame_gray_for_detection, frame_for_verification, state, templates, iz_coords):
+def find_initial_flame(frame_gray_for_detection, state, iz_coords):
+    """
+    Detects flame based purely on brightness/intensity within the Ignition Zone.
+    """
     iz_x, iz_y, iz_w, iz_h = iz_coords
     ignition_area_gray = frame_gray_for_detection[iz_y:iz_y + iz_h, iz_x:iz_x + iz_w]
     if ignition_area_gray.size == 0: return
 
     (min_val, max_val, min_loc, max_loc) = cv2.minMaxLoc(ignition_area_gray)
     
+    # Simplified Logic: If pixel is bright enough, it's a flame.
     if max_val >= BRIGHTNESS_DETECTION_THRESHOLD:
         center_x_abs = max_loc[0] + iz_x
         center_y_abs = max_loc[1] + iz_y
@@ -169,51 +159,39 @@ def find_initial_flame(frame_gray_for_detection, frame_for_verification, state, 
         dy = int(center_y_abs - db_h / 2)
         initial_box = (dx, dy, db_w, db_h)
         
-        roi = frame_for_verification[dy:dy+db_h, dx:dx+db_w]
-        max_score = -10.0 
-        if roi.size > 0:
-            if len(roi.shape) == 3:
-                roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-            else:
-                roi_gray = roi
-            
-            for t in templates:
-                th, tw = t.shape
-                if not (roi_gray.shape[0] < th or roi_gray.shape[1] < tw):
-                    res = cv2.matchTemplate(roi_gray, t, cv2.TM_CCOEFF_NORMED)
-                    _, s, _, _ = cv2.minMaxLoc(res)
-                    if s > max_score: max_score = s
+        ix, iy, iw, ih = initial_box
+        is_STRICTLY_inside = (ix > iz_x and 
+                             iy > iz_y and 
+                             (ix + iw) < (iz_x + iz_w) and 
+                             (iy + ih) < (iz_y + iz_h))
         
-        if max_score >= EXTINGUISH_THRESHOLD: 
-            ix, iy, iw, ih = initial_box
-            is_STRICTLY_inside = (ix > iz_x and 
-                                 iy > iz_y and 
-                                 (ix + iw) < (iz_x + iz_w) and 
-                                 (iy + ih) < (iz_y + iz_h))
+        if is_STRICTLY_inside:
+            roi_center_x_mm = get_centroid_x_in_mm(initial_box, PIXELS_PER_MM, state['direction'], state['total_width_mm'])
             
-            if is_STRICTLY_inside:
-                roi_center_x_mm = get_centroid_x_in_mm(initial_box, PIXELS_PER_MM, state['direction'], state['total_width_mm'])
-                
-                state['flame_id_counter'] += 1
-                flame_id = state['flame_id_counter']
-                current_frame_num = state['frame_counter']
-                initiation_time_s = current_frame_num / state['fps']
-                
-                print(f"\n[START] Flame f-{flame_id} initiated at Frame {current_frame_num} ({initiation_time_s:.2f}s)")
-                print(f"        Initial Position: {roi_center_x_mm:.3f} mm (Brightness: {max_val}, Score: {max_score:.2f})\n")
-                
-                state['flame_data'][flame_id] = {
-                    'trajectory_points': [(current_frame_num, initiation_time_s, roi_center_x_mm)],
-                    'end_time_s': None
-                }
-                
-                state['leading_edge_pos_mm'] = roi_center_x_mm 
-                state['is_tracking'] = True
-                state['lost_since_frame'] = 0
-                state['last_known_box'] = [int(v) for v in initial_box]
-                state['display_box'] = [int(v) for v in initial_box]
+            state['flame_id_counter'] += 1
+            flame_id = state['flame_id_counter']
+            current_frame_num = state['frame_counter']
+            initiation_time_s = current_frame_num / state['fps']
+            
+            print(f"\n[START] Flame f-{flame_id} initiated at Frame {current_frame_num} ({initiation_time_s:.2f}s)")
+            print(f"        Initial Position: {roi_center_x_mm:.3f} mm (Brightness: {max_val})\n")
+            
+            state['flame_data'][flame_id] = {
+                'trajectory_points': [(current_frame_num, initiation_time_s, roi_center_x_mm)],
+                'end_time_s': None
+            }
+            
+            state['leading_edge_pos_mm'] = roi_center_x_mm 
+            state['is_tracking'] = True
+            state['lost_since_frame'] = 0
+            state['last_known_box'] = [int(v) for v in initial_box]
+            state['display_box'] = [int(v) for v in initial_box]
 
-def track_by_max_intensity(frame_gray_for_detection, frame_for_verification, state, templates, f_dims, ignition_zone_pixels):
+def track_by_max_intensity(frame_gray_for_detection, frame_for_verification, state, f_dims, ignition_zone_pixels):
+    """
+    Tracks the flame by finding the brightest pixel near the last known location,
+    then refining the box using Contours.
+    """
     frame_width, frame_height = f_dims
     iz_x, iz_y, iz_w, iz_h = ignition_zone_pixels
     track_success = False
@@ -231,6 +209,9 @@ def track_by_max_intensity(frame_gray_for_detection, frame_for_verification, sta
             (min_val, max_val, min_loc, max_loc) = cv2.minMaxLoc(search_area_gray)
             
             if max_val >= BRIGHTNESS_DETECTION_THRESHOLD:
+                # Flame Detected via Intensity
+                track_success = True
+
                 center_x_abs = max_loc[0] + sx
                 center_y_abs = max_loc[1] + sy
                 
@@ -239,54 +220,43 @@ def track_by_max_intensity(frame_gray_for_detection, frame_for_verification, sta
                 dy = int(center_y_abs - db_h / 2)
                 current_box = (dx, dy, db_w, db_h)
                 
-                roi = frame_for_verification[dy:dy+db_h, dx:dx+db_w]
-                max_score = -10.0
-                if roi.size > 0:
-                    if len(roi.shape) == 3:
-                        roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-                    else:
-                        roi_gray = roi
-                    
-                    for t in templates:
-                        th, tw = t.shape
-                        if not (roi_gray.shape[0] < th or roi_gray.shape[1] < tw):
-                            res = cv2.matchTemplate(roi_gray, t, cv2.TM_CCOEFF_NORMED)
-                            _, s, _, _ = cv2.minMaxLoc(res)
-                            if s > max_score: max_score = s
+                # --- CONTOUR REFINEMENT ---
+                # Attempt to fit the box tighter to the actual flame shape
+                contour_box = list(current_box) 
+                c_x, c_y, c_w, c_h = contour_box
+                roi_bin = frame_for_verification[c_y:c_y+c_h, c_x:c_x+c_w]
                 
-                if max_score >= EXTINGUISH_THRESHOLD:
-                    track_success = True
-                    contour_box = list(current_box) 
-                    c_x, c_y, c_w, c_h = contour_box
-                    roi_bin = frame_for_verification[c_y:c_y+c_h, c_x:c_x+c_w]
-                    if roi_bin.size > 0:
-                        if len(roi_bin.shape) == 3:
-                            roi_bin_gray = cv2.cvtColor(roi_bin, cv2.COLOR_BGR2GRAY)
-                        else:
-                            roi_bin_gray = roi_bin
-                        contours, _ = cv2.findContours(roi_bin_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                        if contours:
-                            largest_contour = max(contours, key=cv2.contourArea)
-                            if cv2.contourArea(largest_contour) > MIN_FLAME_AREA_PIXELS:
-                                tx, ty, tw, th = cv2.boundingRect(largest_contour)
-                                contour_box = [c_x + tx, c_y + ty, tw, th]
+                if roi_bin.size > 0:
+                    if len(roi_bin.shape) == 3:
+                        roi_bin_gray = cv2.cvtColor(roi_bin, cv2.COLOR_BGR2GRAY)
+                    else:
+                        roi_bin_gray = roi_bin
+                        
+                    contours, _ = cv2.findContours(roi_bin_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    if contours:
+                        largest_contour = max(contours, key=cv2.contourArea)
+                        # Optional: Enforce minimum area size to ignore noise
+                        if cv2.contourArea(largest_contour) > MIN_FLAME_AREA_PIXELS:
+                            tx, ty, tw, th = cv2.boundingRect(largest_contour)
+                            contour_box = [c_x + tx, c_y + ty, tw, th]
                     
-                    final_roi_box = contour_box
-                    state['last_known_box'] = final_roi_box
-                    
-                    center_x_c1 = final_roi_box[0] + final_roi_box[2] / 2
-                    center_y_c1 = final_roi_box[1] + final_roi_box[3] / 2
-                    
-                    c1_pos_mm = get_centroid_x_in_mm((center_x_c1, center_y_c1, 0, 0), PIXELS_PER_MM, state['direction'], state['total_width_mm'])
-                    
-                    if c1_pos_mm is not None:
-                        if c1_pos_mm > state['leading_edge_pos_mm']:
-                            state['leading_edge_pos_mm'] = c1_pos_mm
-                            db_w, db_h = DISPLAY_BOX_SIZE
-                            dx_disp = int(center_x_c1 - db_w / 2)
-                            dy_disp = int(center_y_c1 - db_h / 2)
-                            state['display_box'] = (dx_disp, dy_disp, db_w, db_h)
+                final_roi_box = contour_box
+                state['last_known_box'] = final_roi_box
+                
+                center_x_c1 = final_roi_box[0] + final_roi_box[2] / 2
+                center_y_c1 = final_roi_box[1] + final_roi_box[3] / 2
+                
+                c1_pos_mm = get_centroid_x_in_mm((center_x_c1, center_y_c1, 0, 0), PIXELS_PER_MM, state['direction'], state['total_width_mm'])
+                
+                if c1_pos_mm is not None:
+                    if c1_pos_mm > state['leading_edge_pos_mm']:
+                        state['leading_edge_pos_mm'] = c1_pos_mm
+                        db_w, db_h = DISPLAY_BOX_SIZE
+                        dx_disp = int(center_x_c1 - db_w / 2)
+                        dy_disp = int(center_y_c1 - db_h / 2)
+                        state['display_box'] = (dx_disp, dy_disp, db_w, db_h)
 
+    # Sanity Check: Ensure tracked object is within valid bounds
     if track_success:
         x, y, w, h = state['last_known_box']
         is_STRICTLY_inside = (x > iz_x and y > iz_y and (x + w) < (iz_x + iz_w) and (y + h) < (iz_y + iz_h))
@@ -401,9 +371,9 @@ def main():
     
     print(f"Tracking direction set to: {'Left-to-Right' if tracking_direction == 'L' else 'Right-to-Left'}")
     
-    image_paths, templates, frame_width, frame_height = initialize_system_from_images(
+    # --- CHANGED: Removed template path argument ---
+    image_paths, frame_width, frame_height = initialize_system_from_images(
         IMAGE_FOLDER_PATH_INPUT, 
-        TEMPLATE_FOLDER_PATH, 
         FPS_FOR_TIMESTAMPS
     )
     
@@ -508,7 +478,7 @@ def main():
 
     print("\nPress 'q' to quit.")
     print("---------------------------------------------------")
-    print("--- STARTING FLAME TRACKING (Max Intensity) ---")
+    print("--- STARTING FLAME TRACKING (Intensity Only) ---")
     
     # --- Create the "Keeper" mask just once ---
     keeper_mask = cv2.bitwise_not(static_object_mask)
@@ -565,21 +535,19 @@ def main():
         iz_x, iz_y, iz_w, iz_h = ignition_zone_pixels
         cv2.rectangle(frame_to_process_and_draw, (iz_x, iz_y), (iz_x + iz_w, iz_y + iz_h), (200, 200, 200), 1)
         
+        # --- CHANGED: Removed templates argument ---
         if state['is_tracking']:
             track_by_max_intensity(
                 gray_enhanced_flame_CLEAN, 
                 frame_to_process_and_draw, 
                 state, 
-                templates, 
                 (frame_width, frame_height), 
                 ignition_zone_pixels
             )
         else:
             find_initial_flame(
                 gray_enhanced_flame_CLEAN, 
-                frame_to_process_and_draw, 
                 state, 
-                templates, 
                 ignition_zone_pixels
             )
         
