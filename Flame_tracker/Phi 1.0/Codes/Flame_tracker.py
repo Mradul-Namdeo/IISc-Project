@@ -10,14 +10,17 @@ import numpy as np
 # ===================================================================================
 
 # --- PRIMARY PARAMETER ---
-# If the brightest pixel in the search area is below this, we assume no flame.
-BRIGHTNESS_DETECTION_THRESHOLD = 1 
+STATIC_ERASER_THRESHOLD = 1   # try 1-5
+STATIC_THRESHOLD = 2   # try either 2 or 3
+LOST_TIMEOUT_SECONDS = 0.0014   # (0.0012 or 0.0014)
+RECORDING_CUTOFF_S = LOST_TIMEOUT_SECONDS
+
+
 
 # --- SECONDARY PARAMETERS ---
+# If the brightest pixel in the search area is below this, we assume no flame.
+BRIGHTNESS_DETECTION_THRESHOLD = 1 
 FRAMES_TO_SEARCH_FOR_BACKGROUND = 20
-
-STATIC_THRESHOLD = 2 
-STATIC_ERASER_THRESHOLD = 1
 # ===================================================================================
 
 
@@ -26,8 +29,8 @@ STATIC_ERASER_THRESHOLD = 1
 # ===================================================================================
 # --- File Paths ---
 IMAGE_FOLDER_PATH_INPUT = r"D:\My flame tracking\Flame_tracker\Phi 1.0\Phi_1p0_u_0p2_C001H001S0001\Phi_1p0_u_0p2_C001H001S0001_frames"
-TRAJECTORY_OUTPUT_FILE = r"D:\My flame tracking\Flame_tracker\Phi 1.0\Phi_1p0_u_0p2_C001H001S0001\Datasets_intensity_corrected\Phi_1p0_u_0p3_C001H001S0001.csv"
-VIDEO_OUTPUT_FOLDER = r"D:\My flame tracking\Flame_tracker\Phi 1.0\Phi_1p0_u_0p2_C001H001S0001\Recorded tracking videos_corrected"
+TRAJECTORY_OUTPUT_FILE = r"D:\My flame tracking\Flame_tracker\Phi 1.0\Phi_1p0_u_0p2_C001H001S0001\Datasets_intensity\Phi_1p0_u_0p3_C001H001S0001.csv"
+VIDEO_OUTPUT_FOLDER = r"D:\My flame tracking\Flame_tracker\Phi 1.0\Phi_1p0_u_0p2_C001H001S0001\Recorded tracking videos"
 
 FPS_FOR_TIMESTAMPS = 4096.0 
 
@@ -40,8 +43,6 @@ PIPE_ZONE = (0.0, 11.0, 210.0, 15.9)
 
 scale_y_position_mm = 22.0
 
-LOST_TIMEOUT_SECONDS = 0.002
-RECORDING_CUTOFF_S = 0.002 
 DISPLAY_BOX_SIZE = (45, 30)
 
 SEARCH_AREA_SCALE = 2.0 
