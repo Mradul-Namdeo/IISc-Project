@@ -1,3 +1,13 @@
+''' 
+For Phi_1p2_u_0p2_C001H001S0001 :
+STATIC_ERASER_THRESHOLD = 2   
+STATIC_THRESHOLD = 3
+
+For other Phi 1.2 videos :
+STATIC_ERASER_THRESHOLD = 5   
+STATIC_THRESHOLD = 2
+'''
+
 import cv2
 import sys
 import time
@@ -10,13 +20,17 @@ import numpy as np
 # ===================================================================================
 
 # --- PRIMARY PARAMETER ---
-BRIGHTNESS_DETECTION_THRESHOLD = 1
-
-# --- SECONDARY PARAMETERS ---
+STATIC_ERASER_THRESHOLD = 5   # try either 2 or 5
+STATIC_THRESHOLD = 2   # try either 2 or 3
 FRAMES_TO_SEARCH_FOR_BACKGROUND = 20
 
-STATIC_THRESHOLD = 2 
-STATIC_ERASER_THRESHOLD = 5
+LOST_TIMEOUT_SECONDS = 0.0012   # (0.0012 or 0.0014)
+RECORDING_CUTOFF_S = LOST_TIMEOUT_SECONDS
+
+
+# --- SECONDARY PARAMETERS ---
+BRIGHTNESS_DETECTION_THRESHOLD = 1
+
 # ===================================================================================
 
 
@@ -24,13 +38,17 @@ STATIC_ERASER_THRESHOLD = 5
 # --- 1. CONFIGURATION ---
 # ===================================================================================
 # --- File Paths ---
-IMAGE_FOLDER_PATH_INPUT = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Phi_1p2_u_0p4_C001H001S0001_frames"
-TRAJECTORY_OUTPUT_FILE = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Datasets_intensity\Phi_1p2_u_0p4_C001H001S0001.csv"
-VIDEO_OUTPUT_FOLDER = r"D:\FREI_videos_Flame_tracking\Phi_1p2\Phi_1p2_u_0p4_C001H001S0001\Recorded tracking videos"
+IMAGE_FOLDER_PATH_INPUT = r"D:\My flame tracking\Flame_tracker\Phi 1.2\Phi_1p2_u_0p4_C001H001S0001\Phi_1p2_u_0p4_C001H001S0001_frames"
+TRAJECTORY_OUTPUT_FILE = r"D:\My flame tracking\Flame_tracker\Phi 1.2\Phi_1p2_u_0p4_C001H001S0001\Datasets_intensity\Phi_1p2_u_0p4_C001H001S0001.csv"
+VIDEO_OUTPUT_FOLDER = r"D:\My flame tracking\Flame_tracker\Phi 1.2\Phi_1p2_u_0p4_C001H001S0001\Recorded tracking videos"
 
-FPS_FOR_TIMESTAMPS = 30.0 
+FPS_FOR_TIMESTAMPS = 4096.0 
 
 PIXELS_PER_MM = 4.8571  
+
+IGNITION_ZONE_MM = (0.0, 8.6, 210.0, 18.0) 
+CLOSE_ZONE_RIGHT_PIPE_MM = (0.0, 9.6, 198.0, 16.6)
+
 IGNITION_ZONE_MM = (0.0, 8.6, 210.0, 18.0) 
 CLOSE_ZONE_RIGHT_PIPE_MM = (0.0, 9.6, 205.0, 16.6)
 
@@ -39,8 +57,6 @@ PIPE_ZONE = (0.0, 11.0, 210.0, 15.9)
 
 scale_y_position_mm = 22.0
 
-LOST_TIMEOUT_SECONDS = 0.15
-RECORDING_CUTOFF_S = 0.15 
 DISPLAY_BOX_SIZE = (45, 30)
 
 SEARCH_AREA_SCALE = 2.0 
@@ -410,10 +426,14 @@ def main():
     fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 
     total_frames = len(image_paths)
+    
+    # --- VIDEO FPS CALCULATION ---
+    # This logic forces the output video to be exactly 5 minutes (300 seconds) long.
+    # We DO NOT use 4096 here, otherwise the video would be too fast to see.
     OUTPUT_VIDEO_FPS = total_frames / 300.0  
     print(f"--- Output video will be saved at {OUTPUT_VIDEO_FPS:.2f} FPS (5 min duration) ---")
 
-    DYNAMIC_PLAYBACK_DELAY = int(1000 / OUTPUT_VIDEO_FPS)
+    DYNAMIC_PLAYBACK_DELAY = int(1000 / OUTPUT_VIDEO_FPS) if OUTPUT_VIDEO_FPS > 0 else 1
     if DYNAMIC_PLAYBACK_DELAY < 1: 
         DYNAMIC_PLAYBACK_DELAY = 1
     print(f"--- Preview window playback delay set to: {DYNAMIC_PLAYBACK_DELAY} ms ---")
