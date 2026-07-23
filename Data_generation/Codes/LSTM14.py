@@ -1,4 +1,4 @@
-# Input: Time, Heat, and Change in heat also.
+# Input: Heat, Change in heat also.
 
 import torch
 import torch.nn as nn
