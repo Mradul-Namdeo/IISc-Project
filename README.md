@@ -39,7 +39,7 @@ Tracking flame propagation in high-speed experimental combustion data is plagued
 
 | System Architecture | Live Tracking Validation |
 | :---: | :---: |
-| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/Flowcharts/Simple/Flame%20Tracker%20Simple%20Flowchart.jpg" alt="System Architecture" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3_C001H001S0001_frames_flame_tracked_intensity.mp4" alt="Live Tracking Validation" width="450"> |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/Flowcharts/Simple/Flame%20Tracker%20Simple%20Flowchart.jpg" alt="System Architecture" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3_C001H001S0001_frames_flame_tracked_intensity.mp4" alt="Tracked Video" width="450"> |
 | *Pipeline detailing the transition from raw video to analytical plots.* <!--[cite: 3] --> | *Max-intensity tracking overlay locked onto the flame front.* <!--[cite: 3] --> |
 
 ---
