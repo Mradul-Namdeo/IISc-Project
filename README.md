@@ -77,7 +77,7 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 **2. Validation in the Time Domain: Uniform Window Sampling**
 
 <details open>
-<summary><b>🔍 Evaluation Strategy (Click to Collapse/Expand)</b></summary>
+<summary><b>🔍 Evaluation Strategy </b></summary>
 <br>
 
 > To rigorously evaluate the model’s stability, we extracted six uniformly spaced inference windows (W1 to W6) across the entire unseen dataset using a linear space distribution.<!--[cite: 4] --> Each window represents 1500 time steps of continuous open-loop prediction (strictly evaluated after the 500-step warm-up phase).<!--[cite: 4] --> This confirms that generative accuracy is consistent and independent of specific starting regimes.<!--[cite: 4] -->
