@@ -37,10 +37,21 @@ Tracking flame propagation in high-speed experimental combustion data is plagued
 
 ### Visual Diagnostics
 
-| System Architecture | Live Tracking Validation |
-| :---: | :---: |
-| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/Flowcharts/Simple/Flame%20Tracker%20Simple%20Flowchart.jpg" alt="System Architecture" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3_C001H001S0001_frames_flame_tracked_intensity.mp4" alt="Tracked Video" width="450"> |
-| *Pipeline detailing the transition from raw video to analytical plots.* <!--[cite: 3] --> | *Max-intensity tracking overlay locked onto the flame front.* <!--[cite: 3] --> |
+**1. System Architecture**
+<div align="center">
+  <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/Flowcharts/Simple/Flame%20Tracker%20Simple%20Flowchart.jpg" alt="System Architecture" width="800"><br>
+  <i>Pipeline detailing the transition from raw video to analytical plots.</i> <!--[cite: 3] -->
+</div>
+
+<br>
+
+**2. Tracking Validation**
+<div align="center">
+  <a href="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3_C001H001S0001_frames_flame_tracked_intensity.mp4">
+    <img src="[PASTE_IMAGE_LINK_HERE_FOR_VIDEO_THUMBNAIL]" alt="Click to Watch Tracked Video" width="800">
+  </a><br>
+  <i>Max-intensity tracking overlay locked onto the flame front. (Click image to view video)</i> <!--[cite: 3] -->
+</div>
 
 ---
 
@@ -57,14 +68,30 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 
 **1. Stacked_RNN_Architecture**
 <div align="center">
-  <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Architecture/Stacked_RNN_Architecture.png" alt="Information Flow: Forward Pass & Backpropagation" width="600"><br>
+  <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Architecture/Stacked_RNN_Architecture.png" alt="Information Flow: Forward Pass & Backpropagation" width="800"><br>
   <i>Network Information Flow.</i> <!--[cite: 4] -->
 </div>
 
 <br>
 
-**2. Topological Validation:**
-Statistical metrics alone are insufficient to prove dynamical generalization.<!--[cite: 4] --> To verify the network learned the true system topology instead of merely memorizing sequential data points, Principal Component Analysis (PCA) was applied to the 128-dimensional internal memory ($h_t^{(4)}$) of the RNN.<!--[cite: 4] --> The resulting latent projection organically forms a smooth, bounded 2D envelope that perfectly mirrors the physical ground truth limit cycle ($P$ vs $\Delta P$).<!--[cite: 4] --> This structural isomorphism guarantees the model fundamentally operates on the continuous underlying physics of the thermoacoustic system.<!--[cite: 4] -->
+**2. Validation in the Time Domain: Uniform Window Sampling**
+
+| Window 1 | Window 2 | Window 3 |
+| :---: | :---: | :---: |
+| <img src="[PASTE_LINK_1_HERE]" alt="Window 1" width="300"> | <img src="[PASTE_LINK_2_HERE]" alt="Window 2" width="300"> | <img src="[PASTE_LINK_3_HERE]" alt="Window 3" width="300"> |
+| **Window 4** | **Window 5** | **Window 6** |
+| <img src="[PASTE_LINK_4_HERE]" alt="Window 4" width="300"> | <img src="[PASTE_LINK_5_HERE]" alt="Window 5" width="300"> | <img src="[PASTE_LINK_6_HERE]" alt="Window 6" width="300"> |
+
+<br>
+
+**3. Topological Validation:**
+
+> 💡 **The Challenge:** Statistical metrics alone are insufficient to prove dynamical generalization.<!--[cite: 4] --> 
+> 
+> 🧠 **The Solution:** To verify the network learned the true system topology instead of merely memorizing sequential data points, **Principal Component Analysis (PCA)** was applied to the 128-dimensional internal memory ($h_t^{(4)}$) of the RNN.<!--[cite: 4] --> 
+> 
+> 🌌 **The Result:** The resulting latent projection organically forms a smooth, bounded 2D envelope that **perfectly mirrors the physical ground truth limit cycle** ($P$ vs $\Delta P$).<!--[cite: 4] --> This structural isomorphism guarantees the model fundamentally operates on the continuous underlying physics of the thermoacoustic system.<!--[cite: 4] -->
+
 | Physical Phase Space | Hidden Phase Space |
 | :---: | :---: |
 | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/6_Physical_Phase_Space.png" alt="Physical Phase Space" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/7_Hidden_Phase_Space.png" alt="Hidden Phase Space" width="450"> |
@@ -88,10 +115,13 @@ Macro-scale fluid dynamics demand ultra-precise, sub-pixel edge tracking. <!--[c
 | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_03c_Maximization_Step.png" alt="16-bit Spectrum Clustering" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_03d_2D_Color_Map.png" alt="Cluster-2 (Fringe) Isolation" width="450"> |
 | *Final optimized GMM fitted to frame intensity.* <!--[cite: 2] --> | *2D GMM Hard Assignment Map capturing the transition zone.* <!--[cite: 2] --> |
 
-| Final Result & Validation |
-| :---: |
-| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_15_Final_Comparison.png" alt="Final Result & Validation" width="450"> |
-| *Comparison between normalized raw image and predicted jet.* <!--[cite: 2] --> |
+<br>
+
+<div align="center">
+  <h3>Final Result & Validation</h3>
+  <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_15_Final_Comparison.png" alt="Final Result & Validation" width="800"><br>
+  <i>Comparison between normalized raw image and predicted jet.</i> <!--[cite: 2] -->
+</div>
 
 ---
 
