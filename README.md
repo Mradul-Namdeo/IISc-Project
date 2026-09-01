@@ -55,10 +55,10 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 
 ### Visual Diagnostics
 
-**1. Network Information Flow**
+**1. Stacked_RNN_Architecture**
 <div align="center">
-  <img src="<paste_link_here>" alt="Information Flow: Forward Pass & Backpropagation" width="600"><br>
-  <i>Step 2: Backpropagation Through Time. Gradients ($\nabla\mathcal{L}$) flow backwards to update weights, calculating partial derivatives at each depth.</i> <!--[cite: 4] -->
+  <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Architecture/Stacked_RNN_Architecture.png" alt="Information Flow: Forward Pass & Backpropagation" width="600"><br>
+  <i>Network Information Flow.</i> <!--[cite: 4] -->
 </div>
 
 <br>
