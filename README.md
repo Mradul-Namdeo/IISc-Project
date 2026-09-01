@@ -46,7 +46,7 @@ Tracking flame propagation in high-speed experimental combustion data is plagued
 
 ## 📈 Project 2: High-Frequency Pressure Prediction via RNNs
 
-<a href="Data_Generation_PPT___Mradul.pdf">
+<a href="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Report/Data_Generation_PPT___Mradul.pdf">
   <img src="https://img.shields.io/badge/📄_View_Presentation_Deck-FF0000?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="View Presentation">
 </a>
 
@@ -73,7 +73,7 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 
 ## 💧 Project 3: Unsupervised Spatiotemporal Fluid Segmentation
 
-<a href="Image_Segmentation_PPT___Mradul.pdf">
+<a href="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Report/Image_Segmentation_PPT___Mradul.pdf">
   <img src="https://img.shields.io/badge/📄_View_Presentation_Deck-FF0000?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="View Presentation">
 </a>
 
