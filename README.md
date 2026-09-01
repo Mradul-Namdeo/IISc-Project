@@ -28,7 +28,7 @@ Research conducted under the guidance of Prof. Saptarshi Basu at the Department 
 
 ## 🔥 Project 1: Automated Flame Tracking & Dynamics Analysis
 
-<a href="Flame_Tracking_PPT___Mradul.pdf">
+<a href="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Report/Flame_Tracking_PPT___Mradul.pdf">
   <img src="https://img.shields.io/badge/📄_View_Presentation_Deck-FF0000?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="View Presentation">
 </a>
 
