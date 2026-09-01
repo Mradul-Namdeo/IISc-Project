@@ -48,7 +48,7 @@ Tracking flame propagation in high-speed experimental combustion data is plagued
 **2. Tracking Validation**
 <div align="center">
   <a href="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3_C001H001S0001_frames_flame_tracked_intensity.mp4">
-    <img src="[PASTE_IMAGE_LINK_HERE_FOR_VIDEO_THUMBNAIL]" alt="Click to Watch Tracked Video" width="800">
+    <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Flame_tracker/FREI%20videos/Phi%201.0/Outputs/Tracked%20videos/Phi_1p0_u_0p3_C001H001S0001/Phi_1p0_u_0p3.png" alt="Click to Watch Tracked Video" width="800">
   </a><br>
   <i>Max-intensity tracking overlay locked onto the flame front. (Click image to view video)</i> <!--[cite: 3] -->
 </div>
