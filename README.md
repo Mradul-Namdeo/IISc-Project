@@ -78,9 +78,9 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 
 | Window 1 | Window 2 | Window 3 |
 | :---: | :---: | :---: |
-| <img src="[PASTE_LINK_1_HERE]" alt="Window 1" width="300"> | <img src="[PASTE_LINK_2_HERE]" alt="Window 2" width="300"> | <img src="[PASTE_LINK_3_HERE]" alt="Window 3" width="300"> |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_1.png" alt="Window 1" width="300"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_2.png" alt="Window 2" width="300"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_3.png" alt="Window 3" width="300"> |
 | **Window 4** | **Window 5** | **Window 6** |
-| <img src="[PASTE_LINK_4_HERE]" alt="Window 4" width="300"> | <img src="[PASTE_LINK_5_HERE]" alt="Window 5" width="300"> | <img src="[PASTE_LINK_6_HERE]" alt="Window 6" width="300"> |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_4.png" alt="Window 4" width="300"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_5.png" alt="Window 5" width="300"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/2_Window_6.png" alt="Window 6" width="300"> |
 
 <br>
 
