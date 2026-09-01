@@ -64,6 +64,8 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 <br>
 
 **2. Topological Validation**
+
+Statistical metrics alone are insufficient to prove dynamical generalization.<!--[cite: 4] --> To verify the network learned the true system topology instead of merely memorizing sequential data points, Principal Component Analysis (PCA) was applied to the 128-dimensional internal memory ($h_t^{(4)}$) of the RNN.<!--[cite: 4] --> The resulting latent projection organically forms a smooth, bounded 2D envelope that perfectly mirrors the physical ground truth limit cycle ($P$ vs $\Delta P$).<!--[cite: 4] --> This structural isomorphism guarantees the model fundamentally operates on the continuous underlying physics of the thermoacoustic system.<!--[cite: 4] -->
 | Physical Phase Space | Hidden Phase Space |
 | :---: | :---: |
 | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/6_Physical_Phase_Space.png" alt="Physical Phase Space" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/7_Hidden_Phase_Space.png" alt="Hidden Phase Space" width="450"> |
