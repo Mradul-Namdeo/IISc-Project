@@ -66,8 +66,8 @@ Predicting continuous pressure dynamics from unseen thermal heat signals. This s
 **2. Topological Validation**
 | Physical Phase Space | Hidden Phase Space |
 | :---: | :---: |
-| <img src="<paste_link_here>" alt="Physical Phase Space" width="450"> | <img src="<paste_link_here>" alt="Hidden Phase Space" width="450"> |
-| *Physical Phase Space ($P$ vs $\Delta P$)* <!--[cite: 4] --> | *Hidden Phase Space (PCA $h_t^{(4)}$)* <!--[cite: 4] --> |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/6_Physical_Phase_Space.png" alt="Physical Phase Space" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Data_generation/Stacked_RNN_Results/Phi_1p2_u_0p3/7_Hidden_Phase_Space.png" alt="Hidden Phase Space" width="450"> |
+| *Physical Phase Space (P vs ΔP)* <!--[cite: 4] --> | *Hidden Phase Space (PCA h_t^(4))* <!--[cite: 4] --> |
 
 ---
 
