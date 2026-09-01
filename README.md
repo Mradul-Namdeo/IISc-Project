@@ -82,15 +82,15 @@ Macro-scale fluid dynamics demand ultra-precise, sub-pixel edge tracking. <!--[c
 
 ### Visual Diagnostics
 
-| 16-bit Spectrum Clustering | Step 3D: Cluster-2 (Fringe) Isolation |
+| GMM Convergence | 16-bit Spectrum Clustering |
 | :---: | :---: |
-| <img src="<paste_link_here>" alt="16-bit Spectrum Clustering" width="450"> | <img src="<paste_link_here>" alt="Cluster-2 (Fringe) Isolation" width="450"> |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_03c_Maximization_Step.png" alt="16-bit Spectrum Clustering" width="450"> | <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_03d_2D_Color_Map.png" alt="Cluster-2 (Fringe) Isolation" width="450"> |
 | *Final optimized GMM fitted to frame intensity.* <!--[cite: 2] --> | *2D GMM Hard Assignment Map capturing the transition zone.* <!--[cite: 2] --> |
 
-| Priority CCL & Bounding | Final Result & Validation |
-| :---: | :---: |
-| <img src="<paste_link_here>" alt="Priority CCL & Bounding" width="450"> | <img src="<paste_link_here>" alt="Final Result & Validation" width="450"> |
-| *Resolving internal voids via topological flood-fill.* <!--[cite: 2] --> | *Comparison between normalized raw image and predicted jet.* <!--[cite: 2] --> |
+| Final Result & Validation |
+| :---: |
+| <img src="https://github.com/Mradul-Namdeo/IISc-Project/blob/main/Unsupervised_Image_Segmentation_task/Results/10_KV/Steps/Step_15_Final_Comparison.png" alt="Final Result & Validation" width="450"> |
+| *Comparison between normalized raw image and predicted jet.* <!--[cite: 2] --> |
 
 ---
 
